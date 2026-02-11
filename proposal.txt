@@ -1,0 +1,18 @@
+Joseph Rivera
+2/11/26
+Final Project Proposal
+
+For my final project I would like to create a simplified simulation of a transportation app. From the command line, a user would include their starting position and desired destination. The program would then analyze the information that it has and output the desired route which will get the user to their destination the quickest. The user would also need to include a file that contains the transportation information for their path. I can see the level of complexity for this project scaling as such:
+
+"Easy":
+Given the information about a certain interconnected area (abstracted into a graph of nodes), a starting position, and an ending position, output the quickest path from the start to the end. In this instance, the transportation information passed in would need to be formatted into a CSV file containing bus information. This would include the name of the bus line, origin and destination stops, departure and arrival times, as well as distance between stops. The algorithm should be able to identify which bus to take at each stop along the path to the destination.
+
+"Medium":
+Adding on to the task outlined above, allow for two forms of transportation to be analyzed: buses and trains. This would require a separate CSV file for the train network information. In this implementation, in addition to providing their starting and end points, users could decide which type of transportation they would like to take. This could be only bus, only train, or a mix of the two.
+
+"Hard":
+Extending from the Medium level implementation, I could add another level of constraint: a budget. Given a set budget and adding costs to the transportation methods, users could ask for the cheapest path to their destination. In this instance, transfers between buses and trains would cost money. Therefore the algorithm would have to prioritize transferring less while still making it to the desired destination.
+
+I think that I would like to shoot for the Medium level implementation as my main goal for the project. The Hard level goal would be nice, but since it introduces the need for an alternative algorithm based on cost instead of time, this might exceed the time allotted for the project.
+
+Some additional information that I would need to collect would be general methods for parsing CSV via Haskell. Additionally, some surface level knowledge of train and bus schedules could be helpful in my creation of test CSVs. Other than that, I think that I currently have the information necessary to complete the tasks.
