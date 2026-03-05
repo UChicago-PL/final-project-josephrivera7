@@ -2,17 +2,22 @@
 
 Currently have implemented the algorithm for finding the shortest path for one or two modes of transportation.
 These modes are separated based on the file that you pass in (file1 is treated as buses, file2 as trains)
+You can also find a path that potentially uses them both.
 
-To run the code the commands are: 
+To run the code, the possible commands are: 
     "cabal run Final -- --one [csv file path] [origin] [destination]"
+        - This runs the algorithm on only 1 method
 
-    or
+    "cabal run Final -- --two [csv file path 1] [csv file path 2] [origin] [destination]"
+        - This runs the algorithm on 2 method, and compares their separate optimal paths
 
-    "cabal run Final -- --one [csv file path 1] [csv file path 2] [origin] [destination]"
+    "cabal run Final -- --both [csv file path 1] [csv file path 2] [origin] [destination]"
+        - This runs the algorithm on 2 methods but combines them into a singl optimal path
 
-I included 2 of my testing CSV files to display the format and requirments.
+I included 3 of my testing CSV files to display the format and requirments. I still need to do more 
+intensive testing for the combined implementation.
 
 Steps left to do:
-    - Implement ability to pull find a combined optimal path from two files
     - Implement money system for transportation lines
         - add a toggle to this mode via a command line argument
+    - Potentially tweak algorithm to account for trips that occur across 24 hr border (i.e trip starting at 2200 and ending at 100)

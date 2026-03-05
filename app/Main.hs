@@ -160,5 +160,17 @@ main = do
                         Right (_, trains) -> do
                             let op2_path = showPath (showResult (V.toList trains) origin dest)
                             print (comparePaths op1_path op2_path)
+        ["--both", file1, file2, origin, dest] -> do
+            res1 <- readTransportCsv file1
+            case res1 of
+                Left err -> putStrLn err
+                Right (_, buses) -> do
+                    let b_list = V.toList buses
+                    res2 <- readTransportCsv file2
+                    case res2 of
+                        Left err -> putStrLn err
+                        Right (_, trains) -> do
+                            let t_list = V.toList trains
+                            print (showPath (showResult (b_list ++ t_list) origin dest))
         _ -> putStrLn usage
                     
