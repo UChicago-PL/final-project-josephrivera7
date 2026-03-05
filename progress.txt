@@ -1,8 +1,14 @@
 3/4/26
 
-Currently have implemented the algorithm for finding the shortest path for one mode of transportation.
+Currently have implemented the algorithm for finding the shortest path for one or two modes of transportation.
+These modes are separated based on the file that you pass in (file1 is treated as buses, file2 as trains)
 
-To run the code the command is "cabal run Final -- --one [csv file path] [origin] [destination]"
+To run the code the commands are: 
+    "cabal run Final -- --one [csv file path] [origin] [destination]"
+
+    or
+
+    "cabal run Final -- --one [csv file path 1] [csv file path 2] [origin] [destination]"
 
 I included 2 of my testing CSV files to display the format and requirments.
 
