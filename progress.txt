@@ -7,8 +7,6 @@ To run the code the command is "cabal run Final -- --one [csv file path] [origin
 I included 2 of my testing CSV files to display the format and requirments.
 
 Steps left to do:
-    - Implement ability to pull two files and compare separate optimal paths
-        - Also find a combined optimal path
+    - Implement ability to pull find a combined optimal path from two files
     - Implement money system for transportation lines
-        - Either edit current algorithm to accomadate of this or provide separate, selectable algo that handles this
-            - could toggle this mode via a command line argument
+        - add a toggle to this mode via a command line argument

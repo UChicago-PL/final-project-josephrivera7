@@ -42,8 +42,8 @@ instance FromNamedRecord Bus where
 -- Reading CSV and Creating Graph
 -- ==============================
 
-readPeopleCsv :: FilePath -> IO (Either String (Header, V.Vector Bus))
-readPeopleCsv filePath = do
+readTransportCsv :: FilePath -> IO (Either String (Header, V.Vector Bus))
+readTransportCsv filePath = do
     csvData <- BL.readFile filePath
     return $ decodeByName csvData
 
@@ -131,6 +131,9 @@ showPath :: Maybe (Int, [Bus]) -> (Int, [String])
 showPath Nothing = (-1, [])
 showPath (Just (d, buses)) = (d, [bus_number b | b <- buses])
 
+comparePaths :: (Int, [String]) -> (Int, [String]) -> (Int, [String])
+comparePaths op1 op2 = minimumBy (comparing fst) [op1, op2]
+
 -- ==============
 -- Main Interface
 -- ============== 
@@ -141,9 +144,21 @@ main = do
     let usage = "Incorrect command, please use one from the website"
     case args of 
         ["--one", file, bus_origin, bus_dest] -> do
-            result <- readPeopleCsv file
+            result <- readTransportCsv file
             case result of
                 Left err -> putStrLn err
                 Right (_, buses) -> print (showPath (showResult (V.toList buses) bus_origin bus_dest))
+        ["--two", file1, file2, origin, dest] -> do
+            res1 <- readTransportCsv file1
+            case res1 of
+                Left err -> putStrLn err
+                Right (_, buses) -> do
+                    let op1_path = showPath (showResult (V.toList buses) origin dest)
+                    res2 <- readTransportCsv file2
+                    case res2 of
+                        Left err -> putStrLn err
+                        Right (_, trains) -> do
+                            let op2_path = showPath (showResult (V.toList trains) origin dest)
+                            print (comparePaths op1_path op2_path)
         _ -> putStrLn usage
                     
