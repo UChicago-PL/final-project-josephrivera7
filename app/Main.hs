@@ -5,9 +5,8 @@ module Main where
 import Data.Csv
 import System.IO
 import System.Environment ( getArgs )
-import Data.List ( find, minimumBy )
+import Data.List ( minimumBy )
 import Data.Ord ( comparing )
-import Control.Monad ( unless )
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Vector as V
 import qualified Data.Set as S
@@ -231,7 +230,7 @@ showResult b origin dest = timeAwareDijkstra graph origin dest 0 where
 showPath :: Maybe (Int, [Bus]) -> (Int, [String])
 {-  If no path exists, output a negative time value and an empty list.
     Else, output the end time and formatted list of output strings. -}
-showPath Nothing = (-1, [])
+showPath Nothing = (-1, ["A valid path could not be found."])
 showPath (Just (d, buses)) = (d, pathStr buses ++ totalStr (d, buses))
 
 pathStr :: [Bus] -> [String]
@@ -263,7 +262,7 @@ showCostResult b origin dest = costAwareDijkstra graph origin dest 0 where
 showCostPath :: Maybe (Double, [Bus]) -> (Double, [String])
 {-  If no path exists, output a negative time value and an empty list.
     Else, output the end time and formatted list of output strings. -}
-showCostPath Nothing = (-1, [])
+showCostPath Nothing = (-1, ["A valid path could not be found."])
 showCostPath (Just (d, buses)) = (d, pathStr buses ++ costTotalStr (d, buses))
 
 costTotalStr :: (Double, [Bus]) -> [String]
