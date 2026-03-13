@@ -1,0 +1,5 @@
+bus_number,origin,destination,departure,arrival,price
+B1,A,B,2300,0,2.00
+B2,A,C,2200,100,1.00
+B3,C,D,150,250,1.00
+B4,B,D,100,200,2.00

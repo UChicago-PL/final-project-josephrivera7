@@ -4,7 +4,6 @@ module Main where
 
 import Data.Csv
 import System.IO
-import System.Environment ( getArgs )
 import Data.List ( minimumBy )
 import Data.Ord ( comparing )
 import qualified Data.ByteString.Lazy as BL
@@ -79,8 +78,7 @@ createGraph ns bs = [(n, findEdges bs (name n)) | n <- ns]
 
 buildAdj :: Graph -> M.Map String [Bus]
 {-  Build adjacency list between strings and lists of buses. -}
-buildAdj graph =
-    M.fromList [(name n, bs) | (n, bs) <- graph]
+buildAdj graph = M.fromList [(name n, bs) | (n, bs) <- graph]
 
 initState :: String -> Int 
     -> ( M.Map String Int, M.Map String Bus, S.Set String, S.Set (Int, String))
@@ -120,7 +118,7 @@ relaxBusTime :: Int -> ( M.Map String Int, M.Map String Bus, S.Set (Int, String)
     -> ( M.Map String Int, M.Map String Bus, S.Set (Int, String))
 {-  If the next bus is valid, update the state and return it
     Otherwise, return the original state. -}
-relaxBusTime currentTime (distAcc, parentAcc, queueAcc) bus
+relaxBusTime _ (distAcc, parentAcc, queueAcc) bus
   | maybe True (arrival bus <) (M.lookup (destination bus) distAcc) =
       ( M.insert (destination bus) (arrival bus) distAcc
       , M.insert (destination bus) bus parentAcc
@@ -186,7 +184,7 @@ relaxBusCost :: Double -> Int -> ( M.Map String Double, M.Map String Bus, S.Set 
   -> Bus -> ( M.Map String Double, M.Map String Bus, S.Set (Double, Int, String))
 {-  If the next bus is valid, update the state and return it
     Otherwise, return the original state. -}
-relaxBusCost currentCost currentTime (distAcc, parentAcc, queueAcc) bus
+relaxBusCost currentCost _ (distAcc, parentAcc, queueAcc) bus
   | maybe True (newCost <) (M.lookup dest distAcc) =
       ( M.insert dest newCost distAcc
       , M.insert dest bus parentAcc
@@ -223,7 +221,7 @@ costAwareDijkstra graph start goal startTime =
 showResult :: [Bus] -> String -> String -> Maybe (Int, [Bus])
 {-  Create graph from list of buses, origin string, and destination string.
     Calls the algorithm and outputs the result. -}
-showResult b origin dest = timeAwareDijkstra graph origin dest 0 where
+showResult b og dest = timeAwareDijkstra graph og dest 0 where
     nodes = createNodes(findNodes b)
     graph = createGraph nodes b
 
@@ -242,7 +240,7 @@ pathStr = map (\b -> "Take " ++ bus_number b ++ " from " ++ origin b ++ " to "
 totalStr :: (Int, [Bus]) -> [String]
 {-  Create a list with a single string containing the final information. -}
 totalStr (d, buses) = ["\nTotal time to get to " ++ (destination . last) buses 
-    ++ ": " ++ show diff ++ " hours"]
+    ++ ": " ++ show (diff :: Double) ++ " hours"]
     where
         start = (departure . head) buses
         diff = fromIntegral (d - start) / 100.0
@@ -255,7 +253,7 @@ comparePaths op1 op2 = minimumBy (comparing fst) (filter (\(x, _) -> x > 0 ) [op
 showCostResult :: [Bus] -> String -> String -> Maybe (Double, [Bus])
 {-  Create graph from list of buses, origin string, and destination string.
     Calls the cost algorithm and outputs the result. -}
-showCostResult b origin dest = costAwareDijkstra graph origin dest 0 where
+showCostResult b og dest = costAwareDijkstra graph og dest 0 where
     nodes = createNodes(findNodes b)
     graph = createGraph nodes b
     
@@ -310,6 +308,7 @@ main = do
                     case requirement of 
                         "time" -> putStrLn (unlines $ snd (showPath (showResult (V.toList buses) origin_str dest_str)))
                         "price" -> putStrLn (unlines $ snd (showCostPath (showCostResult (V.toList buses) origin_str dest_str)))
+                        _ -> putStrLn "Invalid requirement read"
         "two" -> do
             cstr <- looping "Do you want to use separate paths or combine them? (separate or combined)\n" ["separate", "combined"]
             case cstr of
@@ -333,6 +332,7 @@ main = do
                                             let op1_path = showCostPath (showCostResult (V.toList buses) origin_str dest_str)
                                                 op2_path = showCostPath (showCostResult (V.toList trains) origin_str dest_str)
                                             putStrLn (unlines $ snd (compareCostPaths op1_path op2_path))
+                                        _ -> putStrLn "Invalid requirement read"
                 "combined" -> do
                     file1 <- prompt "Path of file 1:\n"
                     res1 <- readTransportCsv file1
@@ -353,4 +353,7 @@ main = do
                                             let b_list = V.toList buses
                                             let t_list = V.toList trains
                                             putStrLn (unlines $ snd (showCostPath (showCostResult (b_list ++ t_list) origin_str dest_str)))
+                                        _ -> putStrLn "Invalid requirement read"
+                _ -> putStrLn "Invalid method read"
+        _ -> putStrLn "Invalid number of transports read"
                     

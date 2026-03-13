@@ -67,7 +67,7 @@ executable Final
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.18.3.0, cassava, bytestring, vector, containers, psqueues
+    build-depends:    base ^>=4.18.3.0, cassava, bytestring, vector, containers
 
     -- Directories containing source files.
     hs-source-dirs:   app
